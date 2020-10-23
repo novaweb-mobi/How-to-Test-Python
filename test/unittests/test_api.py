@@ -1,7 +1,7 @@
 from datetime import datetime
 from unittest.mock import Mock
 
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
 from User import User
 from app import user_api
@@ -75,3 +75,18 @@ class TestAPI:
                         "3Zhd2ViLm15bG9naW5hcGkiLCJzdWIiOiIwMDAwMDAwMDAwMDAw" \
                         "MDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJNeU5hbWUifQ." \
                         "SFUHX4l8px3gl8WFWOyDSPA5Wpvmva9u_RkkBb9WOx8"
+
+    @mark.parametrize("user, iss, exp", [
+        (123, "iss", 20.0),
+        ("user", "iss", 20.0),
+        (True, "iss", 20.0),
+        (User(name="MyName"), 1, 20.0),
+        (User(name="MyName"), True, 20.0),
+        (User(name="MyName"), object(), 20.0),
+        (User(name="MyName"), "iss", True),
+        (User(name="MyName"), "iss", "20.0"),
+    ])
+    def test_generate_token_wrong_params(self, mocker, user, iss, exp):
+        with raises(ValueError):
+            user_api.generate_token(user=user, iss=iss, exp=exp)
+
