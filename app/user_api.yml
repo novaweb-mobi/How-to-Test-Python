@@ -296,6 +296,55 @@ paths:
                 properties:
                   error:
                     type: string
+    post:
+      operationId: user_api.login
+      security:
+        - jwt: ['secret']
+      tags:
+        - "User"
+      parameters:
+        - name: id_
+          in: path
+          type: string
+          required: true
+          description: "Id of user to select"
+        - name: name
+          in: body
+          type: string
+          required: true
+          description: "User to add"
+      summary: "Update User"
+      description: |
+        "Update User in database."
+      responses:
+        200:
+          description: "User"
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  entity:
+                    type: object
+        500:
+          description: "An error ocurred"
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  error:
+                    type: string
 
 securityDefinitions:
   jwt:
