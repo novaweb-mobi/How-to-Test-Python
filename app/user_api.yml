@@ -298,8 +298,8 @@ paths:
                     type: string
     post:
       operationId: user_api.login
-      security:
-        - jwt: ['secret']
+#      security:
+#        - jwt: ['secret']
       tags:
         - "User"
       parameters:
@@ -310,7 +310,8 @@ paths:
           description: "Id of user to select"
         - name: name
           in: body
-          type: string
+          schema:
+            type: object
           required: true
           description: "User to add"
       summary: "Update User"
