@@ -100,3 +100,16 @@ class TestAPI:
 
         assert response == ("Login successful!", {"token": "MyToken"})
 
+    def test_login_invalid(self, mocker, dao_mock):
+        user = User(id_="00000000000000000000000000000000", name="NotMine")
+        dao_mock.get.return_value = user
+
+        error_response = mocker.patch("app.user_api.error_response")
+        error_response.side_effect = lambda status_code, message, data: \
+            (status_code, message, data)
+
+        response = user_api.login("00000000000000000000000000000000", "MyName")
+
+        mocker.patch("app.user_api.generate_token").return_value = "MyToken"
+
+        assert response == (403, "Invalid data!", {"error": "Unable to login"})

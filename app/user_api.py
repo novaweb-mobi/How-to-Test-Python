@@ -96,14 +96,14 @@ def delete(id_: str, dao: GenericSQLDAO):
 
 
 @use_dao(UserDAO, "Unable to Login")
-def login(id_: str, name: str) -> Response:
+def login(id_: str, name: str, dao: GenericSQLDAO) -> Response:
     """Verifies the user name and generates a session token if valid
 
+    :param dao: DAO instance to query the database
     :param id_: ID of the user trying to login
     :param name: Name inputted by user to verify
     :return: Success response with token if name is valid or Error response.
     """
-    pass
 
 
 def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
