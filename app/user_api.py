@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import nova_api
+from flask import Response
 from jose import jwt
 from nova_api.dao.generic_sql_dao import GenericSQLDAO
 from nova_api import error_response, success_response, use_dao
@@ -94,9 +95,20 @@ def delete(id_: str, dao: GenericSQLDAO):
                             data={"User": dict(entity)})
 
 
+@use_dao(UserDAO, "Unable to Login")
+def login(id_: str, name: str) -> Response:
+    """Verifies the user name and generates a session token if valid
+
+    :param id_: ID of the user trying to login
+    :param name: Name inputted by user to verify
+    :return: Success response with token if name is valid or Error response.
+    """
+    pass
+
+
 def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
                    exp: float = 20.0) -> str:
-    """ Generates a JWT token for the specified user.
+    """Generates a JWT token for the specified user.
 
     Includes sub as user id and name as user name in the claims. Default \
     lifetime is 20 minutes and default iss is "mobi.novaweb.myloginapi".
@@ -109,7 +121,7 @@ def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
     if not isinstance(user, User) or not isinstance(iss, str) \
             or not isinstance(exp, float):
         raise ValueError("Invalid parameters!")
-    
+
     now = datetime.utcnow()
     claims = {
         "iat": now,

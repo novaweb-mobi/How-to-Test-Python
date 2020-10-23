@@ -86,7 +86,7 @@ class TestAPI:
         (User(name="MyName"), "iss", True),
         (User(name="MyName"), "iss", "20.0"),
     ])
-    def test_generate_token_wrong_params(self, mocker, user, iss, exp):
+    def test_generate_token_wrong_params(self, user, iss, exp):
         with raises(ValueError):
             user_api.generate_token(user=user, iss=iss, exp=exp)
 
