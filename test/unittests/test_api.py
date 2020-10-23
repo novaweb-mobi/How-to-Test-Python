@@ -90,3 +90,13 @@ class TestAPI:
         with raises(ValueError):
             user_api.generate_token(user=user, iss=iss, exp=exp)
 
+    def test_login_valid(self, mocker, dao_mock, success_response):
+        user = User(id_="00000000000000000000000000000000", name="MyName")
+        dao_mock.get.return_value = user
+
+        response = user_api.login("00000000000000000000000000000000", "MyName")
+
+        mocker.patch("app.user_api.generate_token").return_value = "MyToken"
+
+        assert response == ("Login successful!", {"token": "MyToken"})
+
