@@ -17,8 +17,8 @@ def read(length: int = 20, offset: int = 0,
          dao: GenericSQLDAO = None, **kwargs):
     for key, value in kwargs.items():
         kwargs[key] = value.split(',') \
-                        if len(value.split(',')) > 1 \
-                        else value
+            if len(value.split(',')) > 1 \
+            else value
     total, results = dao.get_all(length=length, offset=offset,
                                  filters=kwargs if len(kwargs) > 0 else None)
     return success_response(message="List of user",
@@ -88,3 +88,8 @@ def delete(id_: str, dao: GenericSQLDAO):
 
     return success_response(message="User deleted",
                             data={"User": dict(entity)})
+
+
+def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
+                   exp: float = 20.0):
+    pass

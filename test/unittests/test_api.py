@@ -57,3 +57,7 @@ class TestAPI:
                                       "results": [dict(user)
                                                   for user
                                                   in users]})
+
+    def test_generate_token(self):
+        pass
+
