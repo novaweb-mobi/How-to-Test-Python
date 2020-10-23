@@ -106,6 +106,10 @@ def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
     :param exp: Lifetime of the token in minutes.
     :return: JWT encoded token signed with HSA256
     """
+    if not isinstance(user, User) or not isinstance(iss, str) \
+            or not isinstance(exp, float):
+        raise ValueError("Invalid parameters!")
+    
     now = datetime.utcnow()
     claims = {
         "iat": now,
