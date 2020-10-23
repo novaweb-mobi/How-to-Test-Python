@@ -115,8 +115,6 @@ paths:
                     type: string
     post:
       operationId: user_api.create
-      security:
-        - jwt: ['secret']
       tags:
         - "User"
       parameters:
