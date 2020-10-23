@@ -11,19 +11,22 @@ class TestAPI:
     def success_response(self, mocker):
         success_response = mocker.patch("app.user_api.success_response")
         success_response.side_effect = lambda message, data: (message, data)
+        return success_response
 
-    def test_probe_ok(self, success_response):
-        dao_mock = Mock()
+    @fixture
+    def dao_mock(self):
+        return Mock()
+
+    def test_probe_ok(self, success_response, dao_mock):
         dao_mock.get_all.return_value = 0, []
 
         a = user_api.probe.__wrapped__(dao=dao_mock)
         print(dao_mock.mock_calls)
         assert a == ('API Ready', {'available': 0})
 
-    def test_read_no_filter(self, success_response):
+    def test_read_no_filter(self, success_response, dao_mock):
         users = [User(name="MyName"), User(name="OtherName")]
 
-        dao_mock = Mock()
         dao_mock.get_all.return_value = len(users), users
 
         a = user_api.read.__wrapped__(dao=dao_mock)
