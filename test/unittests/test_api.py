@@ -63,7 +63,7 @@ class TestAPI:
 
     def test_generate_token(self, mocker):
         user = User(id_="00000000000000000000000000000000", name="MyName",
-                    email="MyEmail@mymail.com", birthday = "10/10/1998")
+                    email="MyEmail@mymail.com", birthday="10/10/1998")
 
         iat = mocker.patch('app.user_api.datetime')
         iat.utcnow.return_value = datetime(2018, 1, 18, 1, 30, 22, 0)
@@ -94,9 +94,11 @@ class TestAPI:
         user = User(id_="00000000000000000000000000000000", name="MyName")
         dao_mock.get.return_value = user
 
-        response = user_api.login("00000000000000000000000000000000", "MyName")
+        gen = mocker.patch("app.user_api.generate_token")
+        gen.return_value = "MyToken"
 
-        mocker.patch("app.user_api.generate_token").return_value = "MyToken"
+        response = user_api.login.__wrapped__(
+            "00000000000000000000000000000000", "MyName", dao=dao_mock)
 
         assert response == ("Login successful!", {"token": "MyToken"})
 
@@ -108,8 +110,7 @@ class TestAPI:
         error_response.side_effect = lambda status_code, message, data: \
             (status_code, message, data)
 
-        response = user_api.login("00000000000000000000000000000000", "MyName")
-
-        mocker.patch("app.user_api.generate_token").return_value = "MyToken"
+        response = user_api.login.__wrapped__(
+            "00000000000000000000000000000000", "MyName", dao=dao_mock)
 
         assert response == (403, "Invalid data!", {"error": "Unable to login"})
