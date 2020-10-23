@@ -1,5 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import nova_api
+from jose import jwt
 from nova_api.dao.generic_sql_dao import GenericSQLDAO
 from nova_api import error_response, success_response, use_dao
 
@@ -104,4 +106,14 @@ def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
     :param exp: Lifetime of the token in minutes.
     :return: JWT encoded token signed with HSA256
     """
-    pass
+    now = datetime.utcnow()
+    claims = {
+        "iat": now,
+        "exp": now + timedelta(minutes=exp),
+        "iss": iss,
+        "sub": user.id_,
+        "name": user.name
+    }
+    print(claims)
+    return jwt.encode(claims, key=nova_api.JWT_SECRET)
+

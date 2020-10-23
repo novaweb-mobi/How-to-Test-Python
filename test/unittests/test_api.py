@@ -66,14 +66,12 @@ class TestAPI:
                     email="MyEmail@mymail.com", birthday = "10/10/1998")
 
         iat = mocker.patch('app.user_api.datetime')
-        iat.utcnow.return_value = datetime(2018, 1, 18, 1, 30, 22, 00000)
+        iat.utcnow.return_value = datetime(2018, 1, 18, 1, 30, 22, 0)
 
         token = user_api.generate_token(user)
 
-        assert token == "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1" \
-                        "MTYyMzkwMjIsImV4cCI6IjE1MTYyNDAyMjIiLCJpc3MiOiJtb" \
-                        "2JpLm5vdmF3ZWIubXlsb2dpbmFwaSIsInN1YiI6IjAwMDAwMD" \
-                        "AwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwibmFtZSI6Ik1" \
-                        "5TmFtZSJ9.9Qb7sQ4WhoJKitKXnFo8jvdxOyLnFblk1OY-KFS" \
-                        "I0Uk"
-
+        assert token == "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MT" \
+                        "YyMzkwMjIsImV4cCI6MTUxNjI0MDIyMiwiaXNzIjoibW9iaS5ub" \
+                        "3Zhd2ViLm15bG9naW5hcGkiLCJzdWIiOiIwMDAwMDAwMDAwMDAw" \
+                        "MDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJNeU5hbWUifQ." \
+                        "SFUHX4l8px3gl8WFWOyDSPA5Wpvmva9u_RkkBb9WOx8"
