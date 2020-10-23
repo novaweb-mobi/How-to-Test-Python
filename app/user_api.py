@@ -1,3 +1,4 @@
+from dataclasses import fields
 from datetime import datetime, timedelta
 
 import nova_api
@@ -20,12 +21,16 @@ def probe(dao: GenericSQLDAO = None):
 @use_dao(UserDAO, "Unable to list user")
 def read(length: int = 20, offset: int = 0,
          dao: GenericSQLDAO = None, **kwargs):
+    filters = dict()
     for key, value in kwargs.items():
-        kwargs[key] = value.split(',') \
+        if key not in [field.name for field in fields(User)]:
+            continue
+
+        filters[key] = value.split(',') \
             if len(value.split(',')) > 1 \
             else value
     total, results = dao.get_all(length=length, offset=offset,
-                                 filters=kwargs if len(kwargs) > 0 else None)
+                                 filters=filters if filters else None)
     return success_response(message="List of user",
                             data={"total": total, "results": [dict(result)
                                                               for result
