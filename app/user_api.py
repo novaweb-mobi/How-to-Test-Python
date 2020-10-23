@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from nova_api.dao.generic_sql_dao import GenericSQLDAO
 from nova_api import error_response, success_response, use_dao
 
@@ -91,5 +93,15 @@ def delete(id_: str, dao: GenericSQLDAO):
 
 
 def generate_token(user: User, *, iss: str = "mobi.novaweb.myloginapi",
-                   exp: float = 20.0):
+                   exp: float = 20.0) -> str:
+    """ Generates a JWT token for the specified user.
+
+    Includes sub as user id and name as user name in the claims. Default \
+    lifetime is 20 minutes and default iss is "mobi.novaweb.myloginapi".
+
+    :param user: The user to generate token to
+    :param iss: The issuer of the token.
+    :param exp: Lifetime of the token in minutes.
+    :return: JWT encoded token signed with HSA256
+    """
     pass

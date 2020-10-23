@@ -1,9 +1,12 @@
+from datetime import datetime
 from unittest.mock import Mock
 
 from pytest import fixture, mark
 
 from User import User
 from app import user_api
+
+from nova_api import auth
 
 
 class TestAPI:
@@ -58,6 +61,19 @@ class TestAPI:
                                                   for user
                                                   in users]})
 
-    def test_generate_token(self):
-        pass
+    def test_generate_token(self, mocker):
+        user = User(id_="00000000000000000000000000000000", name="MyName",
+                    email="MyEmail@mymail.com", birthday = "10/10/1998")
+
+        iat = mocker.patch('app.user_api.datetime')
+        iat.utcnow.return_value = datetime(2018, 1, 18, 1, 30, 22, 00000)
+
+        token = user_api.generate_token(user)
+
+        assert token == "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1" \
+                        "MTYyMzkwMjIsImV4cCI6IjE1MTYyNDAyMjIiLCJpc3MiOiJtb" \
+                        "2JpLm5vdmF3ZWIubXlsb2dpbmFwaSIsInN1YiI6IjAwMDAwMD" \
+                        "AwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwibmFtZSI6Ik1" \
+                        "5TmFtZSJ9.9Qb7sQ4WhoJKitKXnFo8jvdxOyLnFblk1OY-KFS" \
+                        "I0Uk"
 
